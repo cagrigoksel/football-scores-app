@@ -1,0 +1,274 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: #297e25;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.match {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.match:last-child {
+    border-bottom: none;
+}
+
+.competition-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+}
+
+.competition-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.match-info {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 800px;
+    width: 100%;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    min-width: 0;
+}
+
+.home-team {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.away-team {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.home-team img {
+    order: 2;
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+.away-team img {
+    order: 1;
+    margin-right: 10px;
+    margin-left: 0;
+}
+
+.team img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin: 0 10px;
+    flex-shrink: 0;
+}
+
+.team-name {
+    font-size: 0.9em;
+    line-height: 1.2;
+    max-width: 150px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+.home-team .team-name {
+    order: 1;
+}
+
+.away-team .team-name {
+    order: 2;
+}
+
+.score {
+    width: 80px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.match-time {
+    width: 80px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+    margin-right: 15px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.live {
+    background-color: #ff4136;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-right: 5px;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.live {
+    animation: pulse 1.5s infinite;
+}
+
+.date-picker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.date-picker input[type="date"] {
+    font-size: 16px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.date-picker button {
+    padding: 8px 15px;
+    background-color: #051122;
+    color: #f1faee;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.date-picker button:hover {
+    background-color: #457b9d;
+}
+
+.league {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.league h2 {
+    margin: 0;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: 500;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.league-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.league-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 15px;
+    object-fit: contain;
+}
+
+.league-header h2 {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
+footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #12340d;
+    color: #f1faee;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+#matches-container p {
+    text-align: center;
+    font-size: 1.1em;
+    margin-top: 20px;
+}
+
+.standings-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.standings-table th, .standings-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.standings-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.standings-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+.back-button {
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #051122;
+    color: #f1faee;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: #457b9d;
+}
