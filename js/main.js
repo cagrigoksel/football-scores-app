@@ -112,12 +112,7 @@ function getMatchTimeDisplay(match) {
 
 function calculateMatchMinute(match) {
     console.log('Calculating minute for match:', match.homeTeam.name, 'vs', match.awayTeam.name);
-    console.log('Match minute from API:', match.minute);
     console.log('Match utcDate:', match.utcDate);
-
-    if (match.minute && match.minute !== 'None') {
-        return match.minute;
-    }
 
     const startTime = new Date(match.utcDate);
     const currentTime = new Date();
