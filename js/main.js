@@ -1,6 +1,5 @@
 const API_KEY = '3f118a0b93754bcd84e7c3537200e252';
 const API_URL = 'https://api.football-data.org/v4/matches';
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 const leagueOrder = [
     'FIFA World Cup',
@@ -36,19 +35,15 @@ function getLeagueColor(leagueName) {
     return leagueColors[leagueName] || '#333'; // Default color if not found
 }
 
-const RATE_LIMIT_DELAY = 60000; // 60 seconds
-let lastRequestTime = 0;
-
 async function fetchMatches(date) {
     try {
         // Ensure the date is in the correct format (YYYY-MM-DD)
         const formattedDate = new Date(date).toISOString().split('T')[0];
-        const url = `${CORS_PROXY}${API_URL}?date=${formattedDate}`;
+        const url = `${API_URL}?date=${formattedDate}`;
         console.log('Fetching matches from URL:', url);
         const response = await fetch(url, {
             headers: {
-                'X-Auth-Token': API_KEY,
-                'Origin': 'http://localhost' // Replace with your actual origin
+                'X-Auth-Token': API_KEY
             }
         });
         console.log('Response status:', response.status);
@@ -149,15 +144,6 @@ function groupAndSortMatchesByLeague(matches) {
     return sortedGroupedMatches;
 }
 
-function getCachedMatches(date) {
-    const cached = localStorage.getItem(`matches_${date}`);
-    return cached ? JSON.parse(cached) : null;
-}
-
-function cacheMatches(date, matches) {
-    localStorage.setItem(`matches_${date}`, JSON.stringify(matches));
-}
-
 async function updateMatches(date) {
     showLoading();
     try {
@@ -179,8 +165,7 @@ async function updateMatches(date) {
         }
     } catch (error) {
         console.error('Error in updateMatches:', error);
-        const container = document.getElementById('matches-container');
-        container.innerHTML = `<p>Error loading matches: ${error.message}. Please try again later.</p>`;
+        showError();
     }
 }
 
@@ -197,14 +182,6 @@ function initDatePicker() {
         updateMatches(selectedDate);
     });
 }
-
-// Initialize date picker and fetch initial matches
-document.addEventListener('DOMContentLoaded', () => {
-    initDatePicker();
-    const selectedDate = document.getElementById('selected-date').value;
-    updateMatches(selectedDate);
-    startLiveUpdates();
-});
 
 function createLeagueElement(leagueName, leagueMatches) {
     const leagueDiv = document.createElement('div');
@@ -237,7 +214,7 @@ function createLeagueElement(leagueName, leagueMatches) {
 async function showLeagueStandings(competitionId, leagueName) {
     try {
         showLoading();
-        const url = `${CORS_PROXY}https://api.football-data.org/v4/competitions/${competitionId}/standings`;
+        const url = `https://api.football-data.org/v4/competitions/${competitionId}/standings`;
         const response = await fetch(url, {
             headers: {
                 'X-Auth-Token': API_KEY
