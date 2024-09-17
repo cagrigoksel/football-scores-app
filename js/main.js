@@ -70,8 +70,19 @@ async function fetchMatches(date) {
 function createMatchElement(match) {
     const matchDiv = document.createElement('div');
     matchDiv.className = 'match';
+    
+    let timeDisplay;
+    if (match.status === 'IN_PLAY' || match.status === 'PAUSED') {
+        const minute = match.minute || 'N/A';
+        timeDisplay = `<span class="live">LIVE</span>${minute}'`;
+    } else if (match.status === 'FINISHED') {
+        timeDisplay = 'FT';
+    } else {
+        timeDisplay = formatMatchTime(match.utcDate);
+    }
+
     matchDiv.innerHTML = `
-        <p class="match-time">${match.status === 'IN_PLAY' ? `<span class="live">LIVE</span>${match.minute}'` : formatMatchTime(match.utcDate)}</p>
+        <p class="match-time">${timeDisplay}</p>
         <div class="match-info">
             <div class="team home-team">
                 <div class="team-name" title="${match.homeTeam.name}">${match.homeTeam.name}</div>
@@ -150,6 +161,7 @@ function cacheMatches(date, matches) {
 async function updateMatches(date) {
     showLoading();
     try {
+        console.log('Updating matches for date:', date);
         const matches = await fetchMatches(date);
         console.log('Fetched matches:', matches);
         const container = document.getElementById('matches-container');
@@ -167,7 +179,8 @@ async function updateMatches(date) {
         }
     } catch (error) {
         console.error('Error in updateMatches:', error);
-        showError('Error loading matches. Please try again later.');
+        const container = document.getElementById('matches-container');
+        container.innerHTML = `<p>Error loading matches: ${error.message}. Please try again later.</p>`;
     }
 }
 
@@ -190,6 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initDatePicker();
     const selectedDate = document.getElementById('selected-date').value;
     updateMatches(selectedDate);
+    startLiveUpdates();
 });
 
 function createLeagueElement(leagueName, leagueMatches) {
@@ -290,4 +304,19 @@ function displayStandings(standings, leagueName) {
     
     container.appendChild(table);
 }
+
+function startLiveUpdates() {
+    setInterval(() => {
+        const selectedDate = document.getElementById('selected-date').value;
+        updateMatches(selectedDate);
+    }, 60000); // Update every 60 seconds
+}
+
+// Add this to your initialization code
+document.addEventListener('DOMContentLoaded', () => {
+    initDatePicker();
+    const selectedDate = document.getElementById('selected-date').value;
+    updateMatches(selectedDate);
+    startLiveUpdates();
+});
 
