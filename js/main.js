@@ -37,7 +37,6 @@ function getLeagueColor(leagueName) {
 
 async function fetchMatches(date) {
     try {
-        // Ensure the date is in the correct format (YYYY-MM-DD)
         const formattedDate = new Date(date).toISOString().split('T')[0];
         const url = `${API_URL}?date=${formattedDate}`;
         console.log('Fetching matches from URL:', url);
@@ -47,14 +46,13 @@ async function fetchMatches(date) {
             }
         });
         console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
         if (!response.ok) {
             const errorBody = await response.text();
             console.error('Error response body:', errorBody);
             throw new Error(`HTTP error! status: ${response.status}, body: ${errorBody}`);
         }
         const data = await response.json();
-        console.log('API Response:', data);
+        console.log('API Response:', JSON.stringify(data, null, 2));
         return data.matches || [];
     } catch (error) {
         console.error('Error fetching matches:', error);
@@ -86,12 +84,15 @@ function createMatchElement(match) {
 }
 
 function getMatchTimeDisplay(match) {
+    console.log('Match data:', JSON.stringify(match, null, 2));
     switch (match.status) {
         case 'SCHEDULED':
         case 'TIMED':
             return formatMatchTime(match.utcDate);
         case 'IN_PLAY':
-            return `<span class="live">LIVE</span>${calculateMatchMinute(match)}'`;
+            const calculatedMinute = calculateMatchMinute(match);
+            console.log('Calculated minute:', calculatedMinute);
+            return `<span class="live">LIVE</span>${calculatedMinute}'`;
         case 'PAUSED':
             return `<span class="live">HT</span>`;
         case 'FINISHED':
@@ -110,6 +111,10 @@ function getMatchTimeDisplay(match) {
 }
 
 function calculateMatchMinute(match) {
+    console.log('Calculating minute for match:', match.homeTeam.name, 'vs', match.awayTeam.name);
+    console.log('Match minute from API:', match.minute);
+    console.log('Match utcDate:', match.utcDate);
+
     if (match.minute && match.minute !== 'None') {
         return match.minute;
     }
@@ -117,6 +122,10 @@ function calculateMatchMinute(match) {
     const startTime = new Date(match.utcDate);
     const currentTime = new Date();
     let minutesElapsed = Math.floor((currentTime - startTime) / 60000);
+
+    console.log('Start time:', startTime);
+    console.log('Current time:', currentTime);
+    console.log('Minutes elapsed:', minutesElapsed);
 
     // Adjust for half-time
     if (minutesElapsed > 45 && minutesElapsed <= 60) {
@@ -326,8 +335,11 @@ function displayStandings(standings, leagueName) {
 function startLiveUpdates() {
     setInterval(() => {
         const selectedDate = document.getElementById('selected-date').value;
-        updateMatches(selectedDate);
-    }, 60000); // Update every 60 seconds
+        const today = new Date().toISOString().split('T')[0];
+        if (selectedDate === today) {
+            updateMatches(selectedDate);
+        }
+    }, 30000); // Update every 30 seconds for live matches
 }
 
 // Add this to your initialization code
