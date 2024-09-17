@@ -88,11 +88,10 @@ function createMatchElement(match) {
 function getMatchTimeDisplay(match) {
     switch (match.status) {
         case 'SCHEDULED':
-            return formatMatchTime(match.utcDate);
         case 'TIMED':
             return formatMatchTime(match.utcDate);
         case 'IN_PLAY':
-            return `<span class="live">LIVE</span>${match.minute}'`;
+            return `<span class="live">LIVE</span>${calculateMatchMinute(match)}'`;
         case 'PAUSED':
             return `<span class="live">HT</span>`;
         case 'FINISHED':
@@ -108,6 +107,31 @@ function getMatchTimeDisplay(match) {
         default:
             return match.status;
     }
+}
+
+function calculateMatchMinute(match) {
+    if (match.minute && match.minute !== 'None') {
+        return match.minute;
+    }
+
+    const startTime = new Date(match.utcDate);
+    const currentTime = new Date();
+    let minutesElapsed = Math.floor((currentTime - startTime) / 60000);
+
+    // Adjust for half-time
+    if (minutesElapsed > 45 && minutesElapsed <= 60) {
+        return '45+';
+    }
+    if (minutesElapsed > 60) {
+        minutesElapsed -= 15; // Subtract 15 minutes for half-time
+    }
+
+    // Cap at 90+ for regular time
+    if (minutesElapsed > 90) {
+        return '90+';
+    }
+
+    return minutesElapsed.toString();
 }
 
 function formatMatchTime(utcDateString) {
