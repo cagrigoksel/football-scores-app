@@ -66,15 +66,7 @@ function createMatchElement(match) {
     const matchDiv = document.createElement('div');
     matchDiv.className = 'match';
     
-    let timeDisplay;
-    if (match.status === 'IN_PLAY' || match.status === 'PAUSED') {
-        const minute = match.minute || 'N/A';
-        timeDisplay = `<span class="live">LIVE</span>${minute}'`;
-    } else if (match.status === 'FINISHED') {
-        timeDisplay = 'FT';
-    } else {
-        timeDisplay = formatMatchTime(match.utcDate);
-    }
+    let timeDisplay = getMatchTimeDisplay(match);
 
     matchDiv.innerHTML = `
         <p class="match-time">${timeDisplay}</p>
@@ -91,6 +83,31 @@ function createMatchElement(match) {
         </div>
     `;
     return matchDiv;
+}
+
+function getMatchTimeDisplay(match) {
+    switch (match.status) {
+        case 'SCHEDULED':
+            return formatMatchTime(match.utcDate);
+        case 'TIMED':
+            return formatMatchTime(match.utcDate);
+        case 'IN_PLAY':
+            return `<span class="live">LIVE</span>${match.minute}'`;
+        case 'PAUSED':
+            return `<span class="live">HT</span>`;
+        case 'FINISHED':
+            return 'FT';
+        case 'SUSPENDED':
+            return 'SUSP';
+        case 'POSTPONED':
+            return 'PP';
+        case 'CANCELLED':
+            return 'CANC';
+        case 'AWARDED':
+            return 'AWD';
+        default:
+            return match.status;
+    }
 }
 
 function formatMatchTime(utcDateString) {
